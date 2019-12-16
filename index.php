@@ -11,7 +11,7 @@ if($config['TIMEZONE'] == NULL || empty($config['TIMEZONE'])){
 //$tpl = tpl_overwrite_variable($tpl, 'TITLE', 'Teste');
 
 
-tpl_generate_page("example.txt");
+//tpl_generate_page("1-example.txt");
 
 
 ?>
