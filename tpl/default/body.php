@@ -1,0 +1,3 @@
+{%POSTS%}
+
+{%LINKS_REL%}
