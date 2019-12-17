@@ -1,9 +1,15 @@
 <?php
 
 
-function create_valid_paths($dst){
+function create_valid_paths($dst, $cli = false){
     global $config;
 
+    if($cli){
+ 
+        $root =  dirname(realpath(__DIR__)) . DIRECTORY_SEPARATOR . $config['SUBFOLDER'];
+        return join(DIRECTORY_SEPARATOR, array($root, $dst));
+    }
+    
     $root = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $config['SUBFOLDER'];
 
     $dir = join(DIRECTORY_SEPARATOR, array($root, $dst));
@@ -21,10 +27,95 @@ function get_epoch_to_date($date){
 }
 
 
-function get_root_path(){
+function get_root_path($cli = false){
+
+    if($cli){
+        return dirname(realpath(__DIR__));
+    }
+
     if(!array_key_exists('DOCUMENT_ROOT', $_SERVER)){
         return dirname(realpath(__DIR__));
     }
 
     return $_SERVER['DOCUMENT_ROOT'];
+}
+
+function get_path($root, $p){
+
+    return  $root . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, $p);
+}
+
+
+define('LOG',1);
+define('WARNING',2);
+define('CRITICAL',3);
+
+
+function show_error($type, $msg){
+    switch($type){
+        case LOG:
+            printf("\n===============\n");
+            printf("\nLOG: %s\n", $msg);
+            printf("===============\n");
+        break;
+        case WARNING:
+            printf("\n===============\n");
+            echo sprintf("\nWARNING: %s\n", $msg);
+            printf("===============\n");
+        break;
+        case CRITICAL:
+            printf("===============\n");
+            printf("\nCRITICAL: %s\n", $msg);
+            printf("===============\n");
+        break;
+    }
+}
+
+function strip_filename(&$path)
+{
+    $path = trim($path);
+    $$path = preg_replace('/\s+/', '', $path);
+}
+
+function read_all_news($root, &$result){
+    $path = $root . DIRECTORY_SEPARATOR . 'drafts';
+
+    foreach( glob($path .  DIRECTORY_SEPARATOR . '*') as $f){
+        //printf("\n%s\n", $f);
+        $result['posts'][] = array('id' => (int) explode('-',basename($f))[0]  , 'draft' => basename($f));
+    }
+
+}
+
+function generate_news_tracking($root){
+    
+    $fullpath = $root . DIRECTORY_SEPARATOR . 'tinycbblog' . DIRECTORY_SEPARATOR . 'tracking.json';
+
+    $news  = null;
+    read_all_news($root, $news);
+
+    if(!file_exists($fullpath)){
+        $json = json_encode($news, JSON_PRETTY_PRINT);
+        file_put_contents($fullpath, $json);
+        load_news_tracking($root, $news);
+    }
+
+    load_news_tracking($root, $news );
+}
+
+function load_news_tracking($root, &$tracking){
+    $fullpath = $root . DIRECTORY_SEPARATOR . 'tinycbblog' . DIRECTORY_SEPARATOR . 'tracking.json';
+    $data = null;
+
+    if(file_exists($fullpath)){
+        $size = filesize($fullpath);
+        $fp = fopen($fullpath, "rb");
+        $data = fread($fp, $size);
+        fclose($fp);
+
+        $tracking = json_decode($data, true);
+        return true;
+    }
+
+    return false;
 }
