@@ -3,14 +3,14 @@
 
 define('ROOT_PATH', dirname(realpath(__DIR__)));
 
+
+
 // allow invoking by CLI only
 if(http_response_code()){
     exit;  //  do not how anything as error just let a blank page as error
 }
 
 require ROOT_PATH . DIRECTORY_SEPARATOR . 'core/bootstrap.php'; 
-
-
 
 $opt = getopt("d:a");
 

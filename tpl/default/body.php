@@ -1,3 +1,4 @@
-{%POSTS%}
+{%POST%}
 
-{%LINKS_REL%}
+
+<a href="mailto:teste@localhost.com.br">{%AUTHOR%}</a>

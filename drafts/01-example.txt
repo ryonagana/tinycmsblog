@@ -1,4 +1,5 @@
 [title]TO TESTANDO NOTICIA[/title]
+[author]Nicholas Oliveira[/author]
 
 **TESTE**
 
