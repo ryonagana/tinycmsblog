@@ -38,7 +38,7 @@ function tpl_get_text_tag_title(&$haystack){
         return $groups[1][0];
     }
     
-    return $groups;
+    return null;
 }
 
 function tpl_get_text_tag_author(&$haystack){

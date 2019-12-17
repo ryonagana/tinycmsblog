@@ -82,8 +82,8 @@ function read_all_news($root, &$result){
 
     foreach( glob($path .  DIRECTORY_SEPARATOR . '*') as $f){
         //printf("\n%s\n", $f);
-
-        $result['posts'][] = array(
+        $id = (int) explode('-',basename($f))[0];
+        $result['posts'][$id] = array(
                                     'id' => (int) explode('-',basename($f))[0],
                                      'draft' => basename($f),
                                      'date' => ''
@@ -91,6 +91,18 @@ function read_all_news($root, &$result){
                                     );
     }
 
+}
+
+function check_news_exists_by_id($root,$id){
+    $news = null;
+    read_all_news($root, $news);
+
+    foreach($news['posts'] as $n){
+        
+        if ((int)$n['id'] === $id) return $n;
+        continue;
+    }
+    return null;
 }
 
 function force_generate_news_tracking($root){

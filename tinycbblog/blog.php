@@ -47,7 +47,9 @@ try {
     }
 
     if(array_key_exists('u', $opt)){
+ 
         force_generate_news_tracking(APPLICATION_DIR);
+      
         printf("\n\nGenerating the news tracker only\n\n");
     }
 
@@ -56,16 +58,31 @@ try {
         $draft_path = get_path(APPLICATION_DIR, array('drafts', $file));
         strip_filename($file);
 
-         
+        $draft = check_news_exists_by_id(APPLICATION_DIR, (int)$file);
 
-        if(!file_exists($draft_path)){
-            show_error(CRITICAL,sprintf("File [%s] doesnt exists\n\n",$draft_path));
-            exit;
+       
+        if(!$draft){
+            if(!file_exists($draft_path)){
+                show_error(CRITICAL,sprintf("File [%s] doesnt exists\n\n",$draft_path));
+                exit;
+            }
+    
+            $name = explode('.', $file);
+            tpl_generate_page($draft_path);
+            printf("\nCREATED: %s\n\n", $name[0] . '.src.html');
         }
 
+        $draft_path = get_path(APPLICATION_DIR, array('drafts', $draft['draft']));
         $name = explode('.', $file);
         tpl_generate_page($draft_path);
-        printf("\nCREATED: %s\n\n", $name[0] . '.src.html');
+
+
+        //load_news_tracking(APPLICATION_DIR, $config['POSTS']);
+        //var_dump($config['POSTS']);
+        exit;
+         
+
+       
     }
 
 }catch(Exception $ex){

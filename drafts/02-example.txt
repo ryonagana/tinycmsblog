@@ -1,4 +1,6 @@
-[title]TESTE[/title]
+[title]TO TESTANDO NOTICIA[/title]
+[author]Nicholas Oliveira[/author]
+[date]12/12/2019[/date]
 
 **TESTE**
 

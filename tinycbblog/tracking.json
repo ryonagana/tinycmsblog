@@ -1,44 +1,54 @@
 {
-    "posts": [
-        {
+    "posts": {
+        "1": {
             "id": 1,
-            "draft": "01-example.txt"
+            "draft": "01-example.txt",
+            "date": ""
         },
-        {
+        "2": {
             "id": 2,
-            "draft": "02-example.txt"
+            "draft": "02-example.txt",
+            "date": ""
         },
-        {
+        "3": {
             "id": 3,
-            "draft": "03-example.txt"
+            "draft": "03-example.txt",
+            "date": ""
         },
-        {
+        "4": {
             "id": 4,
-            "draft": "04-example.txt"
+            "draft": "04-example.txt",
+            "date": ""
         },
-        {
+        "5": {
             "id": 5,
-            "draft": "05-example.txt"
+            "draft": "05-example.txt",
+            "date": ""
         },
-        {
+        "6": {
             "id": 6,
-            "draft": "06-example.txt"
+            "draft": "06-example.txt",
+            "date": ""
         },
-        {
+        "7": {
             "id": 7,
-            "draft": "07-example.txt"
+            "draft": "07-example.txt",
+            "date": ""
         },
-        {
+        "8": {
             "id": 8,
-            "draft": "08-example.txt"
+            "draft": "08-example.txt",
+            "date": ""
         },
-        {
+        "9": {
             "id": 9,
-            "draft": "09-example.txt"
+            "draft": "09-example.txt",
+            "date": ""
         },
-        {
+        "10": {
             "id": 10,
-            "draft": "10-example.txt"
+            "draft": "10-example.txt",
+            "date": ""
         }
-    ]
+    }
 }
