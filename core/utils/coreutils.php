@@ -87,6 +87,22 @@ function read_all_news($root, &$result){
 
 }
 
+function force_generate_news_tracking($root){
+    $fullpath = $root . DIRECTORY_SEPARATOR . 'tinycbblog' . DIRECTORY_SEPARATOR . 'tracking.json';
+
+    $news  = null;
+    if(file_exists($fullpath)){
+        read_all_news($root, $news);
+
+        $json = json_encode($news, JSON_PRETTY_PRINT);
+        file_put_contents($fullpath, $json);
+        load_news_tracking($root, $news);
+        return true; 
+    }
+
+    return false;
+}
+
 function generate_news_tracking($root){
     
     $fullpath = $root . DIRECTORY_SEPARATOR . 'tinycbblog' . DIRECTORY_SEPARATOR . 'tracking.json';

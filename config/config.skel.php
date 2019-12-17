@@ -23,7 +23,5 @@ $config['CORE_FOLDER'] = create_valid_paths('core', $cli_mode);
 $config['TEMPLATE_FOLDER'] = create_valid_paths('tpl', $cli_mode);
 $config['THEME_FOLDER'] = create_valid_paths('tpl/' . $config['THEME'], $cli_mode);
 $config['PARSER'] = new Parsedown();
-
-
-
+$config['POSTS'] = array();
 

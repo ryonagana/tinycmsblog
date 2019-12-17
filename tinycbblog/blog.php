@@ -36,7 +36,12 @@ try {
     }
 
     if(array_key_exists('a', $opt)){
+        force_generate_news_tracking(APPLICATION_DIR);
         generate_news_tracking(APPLICATION_DIR);
+        load_news_tracking(APPLICATION_DIR, $config['POSTS']);
+        
+        tpl_bulk_generate_pages(APPLICATION_DIR, $config['POSTS']['posts']);
+
         
     }
 

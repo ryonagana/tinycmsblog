@@ -1,4 +1,4 @@
-[title]TO TESTANDO NOTICIA[/title]
+[title]TESTE[/title]
 
 **TESTE**
 

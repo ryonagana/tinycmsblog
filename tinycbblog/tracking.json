@@ -3,6 +3,42 @@
         {
             "id": 1,
             "draft": "01-example.txt"
+        },
+        {
+            "id": 2,
+            "draft": "02-example.txt"
+        },
+        {
+            "id": 3,
+            "draft": "03-example.txt"
+        },
+        {
+            "id": 4,
+            "draft": "04-example.txt"
+        },
+        {
+            "id": 5,
+            "draft": "05-example.txt"
+        },
+        {
+            "id": 6,
+            "draft": "06-example.txt"
+        },
+        {
+            "id": 7,
+            "draft": "07-example.txt"
+        },
+        {
+            "id": 8,
+            "draft": "08-example.txt"
+        },
+        {
+            "id": 9,
+            "draft": "09-example.txt"
+        },
+        {
+            "id": 10,
+            "draft": "10-example.txt"
         }
     ]
 }
