@@ -118,9 +118,16 @@ function tpl_generate_page($draft_path){
 
 
     //overwrite static variables in the template values
-    tpl_overwrite_variable($header, 'NEWS_TITLE', $title);
+    
     tpl_overwrite_variable($header, "TITLE", $config['TITLE']);
     tpl_overwrite_variable($body, "POST", $draft);
+
+    if($title){
+        tpl_overwrite_variable($draft, 'NEWS_TITLE', $title);
+        tpl_overwrite_variable($header, 'NEWS_TITLE', $title);
+        tpl_overwrite_variable($body, 'NEWS_TITLE', $title);
+
+    }
     
     if(!$author){
         printf("Author Not Found\n\n");

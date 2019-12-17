@@ -3,6 +3,9 @@
 [date]12/12/2019[/date]
 
 
+
+__{%NEWS_TITLE%}__
+
 **TESTE**
 
 1. TESTE1
@@ -13,5 +16,3 @@
 
 Imagem
 ![Image #1](http://cdn.akamai.steamstatic.com/steam/apps/318570/header_292x136.jpg)
-
-Postado em {%DATE%}
