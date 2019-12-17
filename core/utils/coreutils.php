@@ -82,7 +82,13 @@ function read_all_news($root, &$result){
 
     foreach( glob($path .  DIRECTORY_SEPARATOR . '*') as $f){
         //printf("\n%s\n", $f);
-        $result['posts'][] = array('id' => (int) explode('-',basename($f))[0]  , 'draft' => basename($f));
+
+        $result['posts'][] = array(
+                                    'id' => (int) explode('-',basename($f))[0],
+                                     'draft' => basename($f),
+                                     'date' => ''
+                                    
+                                    );
     }
 
 }

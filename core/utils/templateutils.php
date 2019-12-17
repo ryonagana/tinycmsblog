@@ -59,6 +59,24 @@ function tpl_get_text_tag_author(&$haystack){
 }
 
 
+function tpl_get_text_tag_date(&$haystack){
+    $match = '/\[DATE\](.*)\[\/DATE\](?:(\r\n|\n))/mi';
+    $groups = NULL;
+    preg_match_all($match, $haystack, $groups);
+
+    if(!empty($groups)){
+        
+        //remove the title tag just ONCE
+        $haystack = preg_replace($match, '', $haystack,1);
+        // remove the remaining paragraph  exists or is on HTML
+        $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
+        return $groups[1][0];
+    }
+    
+    return null;
+}
+
+
 function tpl_generate_page($draft_path){
     global $config;
 
@@ -73,8 +91,7 @@ function tpl_generate_page($draft_path){
     //DO EVERYTHING BEFORE PARSING //////////////////////////////////
     $title = tpl_get_text_tag_title($draft); // extract title;
     $author = tpl_get_text_tag_author($draft);
-
-   
+    $post_date = tpl_get_text_tag_date($draft);
 
 
     // END////////////////////////////////////////////////////////
@@ -110,6 +127,12 @@ function tpl_generate_page($draft_path){
     }else{
         printf("author: %s\n\n", $author);
         tpl_overwrite_variable($body, "AUTHOR", $author);
+    }
+
+    if($post_date){
+        $dt = DateTime::createFromFormat("d/m/Y", $post_date, new DateTimeZone($config['TIMEZONE']));
+        tpl_overwrite_variable($body, 'DATE', $dt->format("d/m/Y H:i:s"));
+        printf("%s - Post Date", $dt->format("d/m/Y H:i:s"));
     }
 
 

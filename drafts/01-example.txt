@@ -1,5 +1,7 @@
 [title]TO TESTANDO NOTICIA[/title]
 [author]Nicholas Oliveira[/author]
+[date]12/12/2019[/date]
+
 
 **TESTE**
 
@@ -11,3 +13,5 @@
 
 Imagem
 ![Image #1](http://cdn.akamai.steamstatic.com/steam/apps/318570/header_292x136.jpg)
+
+Postado em {%DATE%}

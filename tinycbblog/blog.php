@@ -12,7 +12,7 @@ if(http_response_code()){
 
 require ROOT_PATH . DIRECTORY_SEPARATOR . 'core/bootstrap.php'; 
 
-$opt = getopt("d:a");
+$opt = getopt("d:au");
 
 global $config;
 
@@ -24,7 +24,8 @@ function usage(){
     echo "TINY BLOG CONTROL PANEL\n";
     echo "\tblog.php <d:a>\n";
     echo "\tblog.php -d <draft name> - Create a new Draft to Post\n";
-    echo "\tblog.php -a - process all drafts\n";
+    echo "\tblog.php -a - process all drafts and update all\n";
+    echo "\tblog.php -u - update the news tracker \n";
     echo "\n"; 
 }
 
@@ -43,6 +44,11 @@ try {
         tpl_bulk_generate_pages(APPLICATION_DIR, $config['POSTS']['posts']);
 
         
+    }
+
+    if(array_key_exists('u', $opt)){
+        force_generate_news_tracking(APPLICATION_DIR);
+        printf("\n\nGenerating the news tracker only\n\n");
     }
 
     if(array_key_exists('d', $opt)){
