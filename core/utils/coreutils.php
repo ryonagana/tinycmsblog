@@ -83,10 +83,19 @@ function read_all_news($root, &$result){
     foreach( glob($path .  DIRECTORY_SEPARATOR . '*') as $f){
         //printf("\n%s\n", $f);
         $id = (int) explode('-',basename($f))[0];
+
+        //tpl_get_text_tag_title()
+
+        $draft_data = file_get_contents($f);
+        $title = tpl_get_text_tag_title($draft_data, false);
+        $dt = tpl_get_text_tag_date($draft_data, false);
+
+
         $result['posts'][$id] = array(
                                     'id' => (int) explode('-',basename($f))[0],
                                      'draft' => basename($f),
-                                     'date' => ''
+                                     'date' => $dt,
+                                     'title' => $title
                                     
                                     );
     }

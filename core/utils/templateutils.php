@@ -24,7 +24,7 @@ function tpl_overwrite_variable(&$tpl, $variable, $data){
 }
 
 
-function tpl_get_text_tag_title(&$haystack){
+function tpl_get_text_tag_title(&$haystack, $clean = true){
     $match = '/\[TITLE\](.*)\[\/TITLE\](?:(\r\n|\n))/mi';
     $groups = NULL;
     preg_match_all($match, $haystack, $groups);
@@ -32,16 +32,19 @@ function tpl_get_text_tag_title(&$haystack){
     if(!empty($groups)){
         
         //remove the title tag just ONCE
-        $haystack = preg_replace($match, '', $haystack,1);
-        // remove the remaining paragraph  exists or is on HTML
-        $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
+
+        if($clean){
+            $haystack = preg_replace($match, '', $haystack,1);
+            // remove the remaining paragraph  exists or is on HTML
+            $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
+        }
         return $groups[1][0];
     }
     
     return null;
 }
 
-function tpl_get_text_tag_author(&$haystack){
+function tpl_get_text_tag_author(&$haystack, $clean = true){
     $match = '/\[AUTHOR\](.*)\[\/AUTHOR\](?:(\r\n|\n))/mi';
     $groups = NULL;
     preg_match_all($match, $haystack, $groups);
@@ -49,9 +52,12 @@ function tpl_get_text_tag_author(&$haystack){
     if(!empty($groups)){
         
         //remove the title tag just ONCE
-        $haystack = preg_replace($match, '', $haystack,1);
-        // remove the remaining paragraph  exists or is on HTML
-        $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
+
+        if($clean){
+            $haystack = preg_replace($match, '', $haystack,1);
+            // remove the remaining paragraph  exists or is on HTML
+            $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
+        }
         return $groups[1][0];
     }
     
@@ -59,7 +65,7 @@ function tpl_get_text_tag_author(&$haystack){
 }
 
 
-function tpl_get_text_tag_date(&$haystack){
+function tpl_get_text_tag_date(&$haystack, $clean = true){
     $match = '/\[DATE\](.*)\[\/DATE\](?:(\r\n|\n))/mi';
     $groups = NULL;
     preg_match_all($match, $haystack, $groups);
@@ -67,10 +73,14 @@ function tpl_get_text_tag_date(&$haystack){
     if(!empty($groups)){
         
         //remove the title tag just ONCE
-        $haystack = preg_replace($match, '', $haystack,1);
+        if($clean){
+            $haystack = preg_replace($match, '', $haystack,1);
+            $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
+        }
+
+       
         // remove the remaining paragraph  exists or is on HTML
-        $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
-        return $groups[1][0];
+        return  $groups[1][0];
     }
     
     return null;
@@ -126,7 +136,6 @@ function tpl_generate_page($draft_path){
         tpl_overwrite_variable($draft, 'NEWS_TITLE', $title);
         tpl_overwrite_variable($header, 'NEWS_TITLE', $title);
         tpl_overwrite_variable($body, 'NEWS_TITLE', $title);
-
     }
     
     if(!$author){
@@ -151,7 +160,6 @@ function tpl_generate_page($draft_path){
     fwrite($fp, $header);
     fwrite($fp, $body);
     fwrite($fp, $footer);
-
     fclose($fp);
     
 
@@ -167,4 +175,49 @@ function tpl_bulk_generate_pages($root, $posts){
         tpl_generate_page( $dir . DIRECTORY_SEPARATOR . $name);
         printf("Processed: %s..\n\n", $name);
     }
+}
+
+
+function tpl_create_post_links($root){
+    global $config;
+    global $blog_conf;
+     
+
+    $post_links = tpl_load_template_var("posts_links.php");
+    $news = null;
+    load_news_tracking($root, $news);
+
+    $out_dir =  $root . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'links.html';
+
+    $out = fopen($out_dir,"wb");
+
+  
+    foreach($news['posts'] as $post){
+        $tmp_link = $post_links;
+        tpl_overwrite_variable($tmp_link, 'LINK', $config['URI'] . $post['id']);
+        tpl_overwrite_variable($tmp_link, 'ANCHOR_LINK', $post['title']);
+        fwrite($out, $tmp_link);
+        printf("\nWritten: %s\n\n", $tmp_link);
+        unset($tmp_link);
+    }
+
+    fclose($out);
+    
+}
+
+
+function tpl_create_site($root){
+    global $blog_conf;
+
+    $news = null;
+    load_news_tracking($root, $news);
+
+
+        // load the template
+    $header = tpl_load_template_var("header.php");
+    $footer = tpl_load_template_var("footer.php");
+    $body   = tpl_load_template_var("body.php");
+
+
+
 }

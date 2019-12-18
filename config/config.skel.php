@@ -10,7 +10,7 @@ $config['TITLE'] = "My Example Title MuthaFucka!!!";
 $config['THEME'] = 'default';
 $config['CUSTOM_THEME']  = '';
 $config['SUBFOLDER'] = 'tinycbblog';
-$config['URI'] = '10.0.3.239/tinycbblog/';
+$config['URI'] = 'http://10.0.3.239/tinycbblog/';
 $config['TIMEZONE'] = 'America/Sao_Paulo';
 
 

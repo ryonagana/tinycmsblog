@@ -12,20 +12,60 @@ if(http_response_code()){
 
 require ROOT_PATH . DIRECTORY_SEPARATOR . 'core/bootstrap.php'; 
 
-$opt = getopt("d:au");
+$opt = getopt("d:augt");
 
 global $config;
 
 chdir("../");
 define('APPLICATION_DIR', getcwd());
 
+$os = php_uname("s");
+
+
+require_once APPLICATION_DIR . DIRECTORY_SEPARATOR . 'tinycbblog' . DIRECTORY_SEPARATOR . 'blog_config.php';
+
+function copyfile($dst,$src, $verbose = false)
+{
+    global $os;
+
+    $verbose = "-v";
+    $ret = null;
+
+    if($os == "Linux"){
+        system(sprintf("cp -r %s  %s %s", $verbose, $src, $dst), $ret);
+    }
+    else if($os == "Windows") {
+        system(sprintf("copy %s %s", $src, $dst), $ret);
+    }else {
+        copy($src,$dst);
+    }
+
+    return $ret;
+}
+
+// trying to make usabe in all OS
+function delete_dir($dir, $filter = "*.html"){
+
+    foreach(glob($dir . DIRECTORY_SEPARATOR . $filter) as $f){
+        printf("\n->delete %s\n\n", $f);
+        unlink($f);
+    }
+
+    if(is_dir($dir)){
+        rmdir($dir);
+    }else {
+        printf("\nFolder not Found\n\n");
+    }
+}
+
 
 function usage(){
     echo "TINY BLOG CONTROL PANEL\n";
-    echo "\tblog.php <d:a>\n";
+    echo "\tblog.php <d:augt>\n";
     echo "\tblog.php -d <draft name> - Create a new Draft to Post\n";
     echo "\tblog.php -a - process all drafts and update all\n";
     echo "\tblog.php -u - update the news tracker \n";
+    echo "\tblog.php -g - generate site layout \n";
     echo "\n"; 
 }
 
@@ -37,6 +77,11 @@ try {
     }
 
     if(array_key_exists('a', $opt)){
+
+        if(!is_dir(APPLICATION_DIR . DIRECTORY_SEPARATOR . 'posts')){
+            mkdir(APPLICATION_DIR . DIRECTORY_SEPARATOR . 'posts');
+        }
+
         force_generate_news_tracking(APPLICATION_DIR);
         generate_news_tracking(APPLICATION_DIR);
         load_news_tracking(APPLICATION_DIR, $config['POSTS']);
@@ -79,11 +124,27 @@ try {
 
         //load_news_tracking(APPLICATION_DIR, $config['POSTS']);
         //var_dump($config['POSTS']);
-        exit;
-         
 
        
     }
+
+    if(array_key_exists('g', $opt)){
+
+        $dir =  APPLICATION_DIR . DIRECTORY_SEPARATOR . 'public';
+        //var_dump($dir, APPLICATION_DIR . DIRECTORY_SEPARATOR . 'posts');
+        delete_dir(APPLICATION_DIR . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'posts');
+        $ret = copyfile($dir, APPLICATION_DIR . DIRECTORY_SEPARATOR . 'posts');
+        tpl_create_post_links(APPLICATION_DIR);
+        //printf("\n%s\n\n", $ret);
+
+    }
+
+    if(array_key_exists('t', $opt)){
+        $n =  null;
+        read_all_news(APPLICATION_DIR,$n);
+
+    }
+
 
 }catch(Exception $ex){
     echo "Exception Caught: " . $ex->getMessage();

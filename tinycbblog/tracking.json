@@ -3,52 +3,62 @@
         "1": {
             "id": 1,
             "draft": "01-example.txt",
-            "date": ""
+            "date": "12\/12\/2019",
+            "title": "TO TESTANDO NOTICIA"
         },
         "2": {
             "id": 2,
             "draft": "02-example.txt",
-            "date": ""
+            "date": "12\/12\/2019",
+            "title": "TO TESTANDO NOTICIA"
         },
         "3": {
             "id": 3,
             "draft": "03-example.txt",
-            "date": ""
+            "date": null,
+            "title": "TESTE"
         },
         "4": {
             "id": 4,
             "draft": "04-example.txt",
-            "date": ""
+            "date": null,
+            "title": "TESTE"
         },
         "5": {
             "id": 5,
             "draft": "05-example.txt",
-            "date": ""
+            "date": null,
+            "title": "TESTE"
         },
         "6": {
             "id": 6,
             "draft": "06-example.txt",
-            "date": ""
+            "date": null,
+            "title": "TESTE"
         },
         "7": {
             "id": 7,
             "draft": "07-example.txt",
-            "date": ""
+            "date": null,
+            "title": "TESTE"
         },
         "8": {
             "id": 8,
             "draft": "08-example.txt",
-            "date": ""
+            "date": null,
+            "title": "TESTE"
         },
         "9": {
             "id": 9,
             "draft": "09-example.txt",
-            "date": ""
+            "date": null,
+            "title": "TESTE"
         },
         "10": {
             "id": 10,
             "draft": "10-example.txt",
-            "date": ""
+            "date": null,
+            "title": "TESTE"
         }
     }
 }
