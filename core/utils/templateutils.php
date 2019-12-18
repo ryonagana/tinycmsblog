@@ -93,7 +93,7 @@ function tpl_get_text_tag_date(&$haystack, $clean = true){
 
 
 function tpl_get_text_tag_introtext(&$haystack, $clean = true){
-    $match = '/\[INTROTEXT\](.+)\[\/INTROTEXT\]/i';
+    $match = '/\[introtext\]([\s\S]*?)\[\/introtext\]/i';
     $groups = NULL;
     preg_match_all($match, $haystack, $groups);
 
@@ -282,6 +282,9 @@ function  tpl_generate_index($root)
         $draft_content = file_get_contents($draft_path);
 
         $intro = tpl_get_text_tag_introtext($draft_content);
+        $intro = parse_draft_to_html($intro);
+
+
 
         if($intro){
             tpl_overwrite_variable($tmp, 'INTROTEXT', $intro);
@@ -289,6 +292,8 @@ function  tpl_generate_index($root)
         if($post['title'] != ''){
             tpl_overwrite_variable($tmp, 'TITLE', $post['title']);
         }
+
+        
 
         fwrite($out, $tmp);
         $counter++;
