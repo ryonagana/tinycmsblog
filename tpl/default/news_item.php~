@@ -1,0 +1,5 @@
+<!-- START NEW ITEM -->
+{%INTROTEXT%}
+Postado em {%DATE%}
+
+<!-- END NEW ITEM -->

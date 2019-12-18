@@ -1,0 +1,28 @@
+RewriteEngine On
+#DirectoryIndex /public/index.html
+
+Options +FollowSymlinks
+Options -Indexes
+
+<FilesMatch "^\.ht">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^\..git">
+    Require all denied
+</FilesMatch>
+
+
+
+<IfModule mod_rewrite.c>
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    RewriteCond %{REQUEST_URI} !^/tinycbblog/public/
+    RewriteRule (.*) public/$1 [L]
+
+     RewriteCond %{REQUEST_URI} !^/tinycbblog/public/posts/
+     RewriteRule /news/(.*) public/posts/$1 [L]
+
+</IfModule>

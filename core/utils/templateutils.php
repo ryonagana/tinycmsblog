@@ -38,7 +38,7 @@ function tpl_get_text_tag_title(&$haystack, $clean = true){
             // remove the remaining paragraph  exists or is on HTML
             $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
         }
-        return $groups[1][0];
+        return $groups[1][0] == '' ? null : $groups[1][0];
     }
     
     return null;
@@ -58,7 +58,7 @@ function tpl_get_text_tag_author(&$haystack, $clean = true){
             // remove the remaining paragraph  exists or is on HTML
             $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
         }
-        return $groups[1][0];
+        return $groups[1][0] == '' ? null : $groups[1][0];
     }
     
     return null;
@@ -80,7 +80,28 @@ function tpl_get_text_tag_date(&$haystack, $clean = true){
 
        
         // remove the remaining paragraph  exists or is on HTML
-        return  $groups[1][0];
+        return $groups[1][0] == '' ? null : $groups[1][0];
+    }
+    
+    return null;
+}
+
+
+function tpl_get_text_tag_introtext(&$haystack, $clean = true){
+    $match = '/\[INTROTEXT\](.*)\[\/INTROTEXT\](?:(\r\n|\n))/mi';
+    $groups = NULL;
+    preg_match_all($match, $haystack, $groups);
+
+    if(!empty($groups)){
+        
+        //remove the title tag just ONCE
+
+        if($clean){
+            $haystack = preg_replace($match, '', $haystack,1);
+            // remove the remaining paragraph  exists or is on HTML
+            $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
+        }
+        return $groups[1][0] == '' ? null : $groups[1][0];
     }
     
     return null;
@@ -106,15 +127,14 @@ function tpl_generate_page($draft_path){
 
     // END////////////////////////////////////////////////////////
 
+    // convert the markup to HTML
     $draft = parse_draft_to_html($draft);
 
+
     // load the template
-    $header = tpl_load_template_var("header.php");
-  
-
-
-    $footer = tpl_load_template_var("footer.php");
-    $body   = tpl_load_template_var("body.php");
+    $header = tpl_load_template_var("news/header.php");
+    $footer = tpl_load_template_var("news/footer.php");
+    $body   = tpl_load_template_var("news/body.php");
     // end load of template
 
     //parse the markup to html
@@ -197,9 +217,10 @@ function tpl_create_post_links($root){
         tpl_overwrite_variable($tmp_link, 'LINK', $config['URI'] . $post['id']);
         tpl_overwrite_variable($tmp_link, 'ANCHOR_LINK', $post['title']);
         fwrite($out, $tmp_link);
-        printf("\nWritten: %s\n\n", $tmp_link);
         unset($tmp_link);
     }
+
+    printf("\n\nlinks generated to links.html\n");
 
     fclose($out);
     
@@ -220,4 +241,41 @@ function tpl_create_site($root){
 
 
 
+}
+
+function  tpl_generate_index($root)
+{
+    $news_tpl = tpl_load_template_var("news_item.php");
+
+    $header = tpl_load_template_var("header.php");
+    $footer = tpl_load_template_var("footer.php");
+    //$body   = tpl_load_template_var("body.php");
+
+    $news = null;
+    load_news_tracking($root, $news);
+
+    $out_dir =  $root . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'index.html';
+
+    $out = fopen($out_dir,"wb");
+
+    tpl_overwrite_variable($header, 'TITLE', 'Página Inicial');
+
+    fwrite($out, $header);
+
+    foreach($news['posts'] as $post){
+        $tmp = $news_tpl;
+        $intro = tpl_get_text_tag_introtext($tmp);
+
+        if($intro){
+            tpl_overwrite_variable($tmp, 'INTROTEXT', $intro);
+        }
+
+        if($post['title'] != ''){
+            tpl_overwrite_variable($tmp, 'TITLE', $post['title']);
+        }
+
+        fwrite($out, $tmp);
+    }
+    fwrite($out, $footer);
+    fclose($out);
 }

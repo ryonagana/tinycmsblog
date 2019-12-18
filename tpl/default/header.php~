@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
 
-    <title>{%TITLE%}</title>
+    <title>{%TITLE%} - {%NEWS_TITLE%}</title>
 </head>
 <body>
     

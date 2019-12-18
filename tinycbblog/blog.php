@@ -114,7 +114,7 @@ try {
     
             $name = explode('.', $file);
             tpl_generate_page($draft_path);
-            printf("\nCREATED: %s\n\n", $name[0] . '.src.html');
+
         }
 
         $draft_path = get_path(APPLICATION_DIR, array('drafts', $draft['draft']));
@@ -122,27 +122,22 @@ try {
         tpl_generate_page($draft_path);
 
 
-        //load_news_tracking(APPLICATION_DIR, $config['POSTS']);
-        //var_dump($config['POSTS']);
-
        
     }
 
     if(array_key_exists('g', $opt)){
 
         $dir =  APPLICATION_DIR . DIRECTORY_SEPARATOR . 'public';
-        //var_dump($dir, APPLICATION_DIR . DIRECTORY_SEPARATOR . 'posts');
         delete_dir(APPLICATION_DIR . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'posts');
         $ret = copyfile($dir, APPLICATION_DIR . DIRECTORY_SEPARATOR . 'posts');
         tpl_create_post_links(APPLICATION_DIR);
-        //printf("\n%s\n\n", $ret);
+
 
     }
 
     if(array_key_exists('t', $opt)){
         $n =  null;
-        read_all_news(APPLICATION_DIR,$n);
-
+        tpl_generate_index(APPLICATION_DIR);
     }
 
 
