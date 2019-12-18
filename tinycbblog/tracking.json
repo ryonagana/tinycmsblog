@@ -2,7 +2,7 @@
     "posts": {
         "1": {
             "id": 1,
-            "draft": "01-example.txt",
+            "draft": "01-example.txt~",
             "date": "12\/12\/2019",
             "title": "TO TESTANDO NOTICIA"
         },

@@ -24,6 +24,11 @@ function tpl_overwrite_variable(&$tpl, $variable, $data){
 }
 
 
+function tpl_remove_variable(&$tpl, $variable){
+    $re = preg_replace("/(\{{1})(\%{1})".$variable."(\%{1})(\}{1})/m", '',$tpl); 
+}
+
+
 function tpl_get_text_tag_title(&$haystack, $clean = true){
     $match = '/\[TITLE\](.*)\[\/TITLE\](?:(\r\n|\n))/mi';
     $groups = NULL;
@@ -88,7 +93,7 @@ function tpl_get_text_tag_date(&$haystack, $clean = true){
 
 
 function tpl_get_text_tag_introtext(&$haystack, $clean = true){
-    $match = '/\[INTROTEXT\](.*)\[\/INTROTEXT\](?:(\r\n|\n))/mi';
+    $match = '/\[INTROTEXT\](.+)\[\/INTROTEXT\]/i';
     $groups = NULL;
     preg_match_all($match, $haystack, $groups);
 
@@ -101,7 +106,9 @@ function tpl_get_text_tag_introtext(&$haystack, $clean = true){
             // remove the remaining paragraph  exists or is on HTML
             $haystack = preg_replace('/\<p\>\<\/p\>(?:(\r\n|\n))/mi', '', $haystack,1);
         }
-        return $groups[1][0] == '' ? null : $groups[1][0];
+
+        return ($groups[1][0] == '') || empty($groups[1][0]) ? null : $groups[1][0];
+ 
     }
     
     return null;
@@ -245,36 +252,46 @@ function tpl_create_site($root){
 
 function  tpl_generate_index($root)
 {
+    global $blog_conf;
+
+
     $news_tpl = tpl_load_template_var("news_item.php");
 
     $header = tpl_load_template_var("header.php");
     $footer = tpl_load_template_var("footer.php");
-    //$body   = tpl_load_template_var("body.php");
 
     $news = null;
     load_news_tracking($root, $news);
 
     $out_dir =  $root . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'index.html';
-
     $out = fopen($out_dir,"wb");
-
     tpl_overwrite_variable($header, 'TITLE', 'Página Inicial');
-
     fwrite($out, $header);
 
+    $counter = 0;
+
     foreach($news['posts'] as $post){
+
+        if($counter >= $blog_conf['MAX_NEWS_PER_PAGE']){
+            break;
+        }
+
         $tmp = $news_tpl;
-        $intro = tpl_get_text_tag_introtext($tmp);
+
+        $draft_path = $root . DIRECTORY_SEPARATOR . 'drafts' . DIRECTORY_SEPARATOR . $post['draft'];
+        $draft_content = file_get_contents($draft_path);
+
+        $intro = tpl_get_text_tag_introtext($draft_content);
 
         if($intro){
             tpl_overwrite_variable($tmp, 'INTROTEXT', $intro);
         }
-
         if($post['title'] != ''){
             tpl_overwrite_variable($tmp, 'TITLE', $post['title']);
         }
 
         fwrite($out, $tmp);
+        $counter++;
     }
     fwrite($out, $footer);
     fclose($out);
